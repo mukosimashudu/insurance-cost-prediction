@@ -1,3 +1,21 @@
+# Model files - we need to track them for deployment
+# *.pkl
+# *.joblib
+
+# But if you need to ignore other pickle files, use:
+# temp_*.pkl
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
 # Python
 __pycache__/
 *.py[cod]
@@ -16,19 +34,4 @@ pythonenv.*
 
 # Jupyter Notebook
 .ipynb_checkpoints/
-*/.ipynb_checkpoints/*
-
-# Model files (too large for GitHub)
-*.pkl
-*.joblib
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
+*/.ipynb_checkments/*
