@@ -11,6 +11,7 @@ import shap
 
 SHAP_AVAILABLE = True
 
+
 # Page configuration
 st.set_page_config(
     page_title="Insurance Cost Predictor",
@@ -367,29 +368,40 @@ def engineer_features(input_dataframe):
 def load_model():
     """Load the trained model"""
 
+    # Get the current directory
+    current_dir = os.getcwd()
+
+    # List all possible paths to try
     possible_paths = [
         "Models/insurance_cost_predictor.pkl",
-        "insurance_cost_predictor.pkl",
-        "models/insurance_cost_predictor.pkl",
+        "./Models/insurance_cost_predictor.pkl",
         "../Models/insurance_cost_predictor.pkl",
-        "./Models/insurance_cost_predictor.pkl"
+        os.path.join("Models", "insurance_cost_predictor.pkl"),
+        os.path.join(current_dir, "Models", "insurance_cost_predictor.pkl"),
+        os.path.join(os.path.dirname(current_dir), "Models", "insurance_cost_predictor.pkl"),
+        "/mount/src/insurance-cost-predict/Models/insurance_cost_predictor.pkl",
+        "/mount/src/insurance-cost-prediction/Models/insurance_cost_predictor.pkl",
     ]
 
-    ml_model = None
-
+    # Try each path silently (no debug output)
     for path in possible_paths:
         if os.path.exists(path):
             try:
-                ml_model = joblib.load(path)
-                st.sidebar.success(f"✅ Model loaded from: {os.path.basename(os.path.dirname(path))} folder")
-                break
+                model = joblib.load(path)
+                # Only show success message, not all the failed attempts
+                st.sidebar.success(f"✅ Model loaded successfully!")
+                return model
             except Exception as e:
+                # Silently continue on error
                 continue
 
-    if ml_model is None:
-        st.sidebar.error("❌ Model file not found!")
+    # Only show error if model not found
+    st.sidebar.error("❌ Model file not found!")
+    return None
 
-    return ml_model
+
+# Load the model
+ml_model = load_model()
 
 
 # Load data and model
