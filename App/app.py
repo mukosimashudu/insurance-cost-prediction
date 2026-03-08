@@ -366,24 +366,23 @@ def engineer_features(input_dataframe):
 
 
 # Load model with path detection
+# Load model with path detection
 @st.cache_resource
 def load_model():
     """Load the trained model"""
 
-    # Get the current directory
-    current_dir = os.getcwd()
+    # Get the absolute path to the repo root (one level up from App/)
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    model_path = os.path.join(repo_root, "Models", "insurance_cost_predictor.pkl")
 
-    # List all possible paths to try
-    possible_paths = [
-        "Models/insurance_cost_predictor.pkl",
-        "./Models/insurance_cost_predictor.pkl",
-        "../Models/insurance_cost_predictor.pkl",
-        os.path.join("Models", "insurance_cost_predictor.pkl"),
-        os.path.join(current_dir, "Models", "insurance_cost_predictor.pkl"),
-        os.path.join(os.path.dirname(current_dir), "Models", "insurance_cost_predictor.pkl"),
-        "/mount/src/insurance-cost-predict/Models/insurance_cost_predictor.pkl",
-        "/mount/src/insurance-cost-prediction/Models/insurance_cost_predictor.pkl",
-    ]
+    try:
+        model = joblib.load(model_path)
+        st.sidebar.success("✅ Model loaded successfully!")
+        return model
+    except Exception as e:
+        st.sidebar.error(f"❌ Model file not found at {model_path}")
+        return None
+
 
     # Try each path silently (no debug output)
     for path in possible_paths:
