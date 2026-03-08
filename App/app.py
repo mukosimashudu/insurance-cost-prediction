@@ -5,6 +5,8 @@ import joblib
 import os
 import plotly.express as px
 import plotly.graph_objects as go
+import warnings
+warnings.filterwarnings('ignore', message='Trying to unpickle estimator')
 
 # SHAP is installed
 import shap
@@ -477,7 +479,7 @@ with left_col:
     st.markdown("---")
 
     # Prediction Button and Result
-    if st.button("🎯 Predict Insurance Cost", width='stretch'):
+    if st.button("🎯 Predict Insurance Cost", use_container_width=True):
         if ml_model is not None:
             input_df = pd.DataFrame({
                 'age': [input_age],
@@ -573,7 +575,7 @@ with right_col:
         )
         fig.update_xaxes(title="Charges ($)", gridcolor='#e9ecef')
         fig.update_yaxes(title="Count", gridcolor='#e9ecef')
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         fig = px.box(dataset_df, x='smoker', y='charges', color='smoker',
@@ -588,7 +590,7 @@ with right_col:
         )
         fig.update_xaxes(title="Smoker", gridcolor='#e9ecef')
         fig.update_yaxes(title="Charges ($)", gridcolor='#e9ecef')
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
     # Charts Row 2
     col1, col2 = st.columns(2)
@@ -606,7 +608,7 @@ with right_col:
         )
         fig.update_xaxes(title="Age Group", gridcolor='#e9ecef')
         fig.update_yaxes(title="Average Charges ($)", gridcolor='#e9ecef')
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         region_charges = dataset_df.groupby('region')['charges'].mean().reset_index()
@@ -619,7 +621,7 @@ with right_col:
             title_font_color='#667eea',
             title_font_size=16
         )
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
     # Charts Row 3
     col1, col2 = st.columns(2)
@@ -637,7 +639,7 @@ with right_col:
         )
         fig.update_xaxes(title="BMI", gridcolor='#e9ecef')
         fig.update_yaxes(title="Charges ($)", gridcolor='#e9ecef')
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         corr_matrix = dataset_df[['age', 'bmi', 'children', 'charges']].corr()
@@ -651,7 +653,7 @@ with right_col:
             title_font_color='#667eea',
             title_font_size=16
         )
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
 # SHAP Explainability Section
 st.markdown("---")
@@ -849,7 +851,7 @@ if ml_model is not None and 'last_input' in st.session_state:
             showlegend=False
         )
 
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
         st.info("""
         **How to read this chart:**
